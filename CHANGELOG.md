@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Add structured logging via `logging.getLogger("pvcr")` for command interception, replay, recording, and blocking events (`wrapper.py`, `recordings.py`)
 - Add descriptive error message to `PVCRBlockedRunException` including the blocked command (`wrapper.py`)
 - Add `ruff` linter and formatter configuration in `pyproject.toml` (rules: E, F, I, W, UP, B, SIM)
+- Add test suite with 53 tests: unit tests for `Recording`, `Recordings`, encoding, fuzzy matching, and integration tests via `pytester` (`tests/`)
 
 ### Changed
 

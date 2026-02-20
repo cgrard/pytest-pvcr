@@ -19,6 +19,9 @@ build-backend = "uv_build"
 [project.entry-points.pytest11]
 pvcr = "pytest_pvcr.plugin"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.ruff]
 target-version = "py312"
 src = ["src"]
