@@ -116,7 +116,7 @@ def pvcr(
         print("pvcr function")
         print(pvcr_fuzzy_matchers)
 
-        fuzzy_matchers = pvcr_global_fuzzy_matchers
+        fuzzy_matchers = list(pvcr_global_fuzzy_matchers)
         for marker in pvcr_fuzzy_matchers:
             if not marker.args:
                 continue
