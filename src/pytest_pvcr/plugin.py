@@ -81,9 +81,9 @@ def pvcr_record_mode(request: SubRequest) -> str:
 
 
 @pytest.fixture(scope="session")
-def pvcr_block_run(request: SubRequest) -> str:
+def pvcr_block_run(request: SubRequest) -> bool:
     """Get pvcr-block-run option value."""
-    return request.config.getoption("--pvcr-block-run") or False
+    return bool(request.config.getoption("--pvcr-block-run"))
 
 
 @pytest.fixture(scope="module")  # type: ignore
