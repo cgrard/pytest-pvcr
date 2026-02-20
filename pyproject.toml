@@ -1,0 +1,20 @@
+[project]
+name = "pytest-pvcr"
+version = "0.1.0"
+description = "PyTest Process VCR"
+readme = "README.md"
+authors = [
+    { name = "Fabien Dupont", email = "fabien.dupont@eurofiber.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=3.5.0",
+    "pyyaml>=6.0.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.2,<0.11.0"]
+build-backend = "uv_build"
+
+[project.entry-points.pytest11]
+pvcr = "pytest_pvcr.plugin"
