@@ -26,8 +26,11 @@ All notable changes to this project will be documented in this file.
 - Add descriptive error message to `PVCRBlockedRunException` including the blocked command (`wrapper.py`)
 - Add `ruff` linter and formatter configuration in `pyproject.toml` (rules: E, F, I, W, UP, B, SIM)
 - Add test suite with 53 tests: unit tests for `Recording`, `Recordings`, encoding, fuzzy matching, and integration tests via `pytester` (`tests/`)
+- Add CI workflow (`.github/workflows/ci.yml`): runs ruff lint/format and pytest on Python 3.12/3.13/3.14 for pushes to main and PRs
 
 ### Changed
+
+- Restrict publish workflow to tagged releases only (`v*` tags) instead of every push
 
 - Pre-compile fuzzy matcher regexes once in `Recordings.__init__()` instead of recompiling on every `_fuzzy_compiler` call (`recordings.py`)
 - Migrate from deprecated `request.node.fspath` (py.path) to `request.node.path` (pathlib.Path) (`plugin.py`)
