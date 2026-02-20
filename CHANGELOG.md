@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Add `once` record mode (`--pvcr-record-mode=once`): records on first run, then replays only and blocks unrecorded commands on subsequent runs (`plugin.py`, `recordings.py`, `wrapper.py`)
 - Add structured logging via `logging.getLogger("pvcr")` for command interception, replay, recording, and blocking events (`wrapper.py`, `recordings.py`)
 - Add descriptive error message to `PVCRBlockedRunException` including the blocked command (`wrapper.py`)
+- Add `ruff` linter and formatter configuration in `pyproject.toml` (rules: E, F, I, W, UP, B, SIM)
 
 ### Changed
 
@@ -31,3 +32,4 @@ All notable changes to this project will be documented in this file.
 - Remove unused `import os` (`plugin.py`)
 - Remove unused `hello()` scaffolding function (`__init__.py`)
 - Add type annotations to `run()` function parameters and return type (`wrapper.py`)
+- Apply `ruff` linting and formatting across all source files (line length, import ordering, style fixes)
