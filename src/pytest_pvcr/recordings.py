@@ -241,7 +241,8 @@ class Recordings:
         if not self._file.exists():
             return
 
-        data = load(self._file.open("r"), Loader=Loader)
+        with self._file.open("r") as f:
+            data = load(f, Loader=Loader)
 
         if not data or not data.get("recordings", []):
             return
@@ -268,7 +269,8 @@ class Recordings:
 
         data = {}
         if self._file.exists():
-            data = load(self._file.open("r"), Loader=Loader)
+            with self._file.open("r") as f:
+                data = load(f, Loader=Loader)
 
         if data is None or "recordings" not in data:
             data = {"recordings": []}
