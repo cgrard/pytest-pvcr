@@ -1,12 +1,8 @@
 # pytest-pvcr
 
-A pytest plugin that records and replays commands executed with `subprocess.run()`.
-
-This plugin was inspired by VCR.py.
+A pytest plugin that records and replays commands executed with `subprocess.run()`, inspired by [VCR.py](https://vcrpy.readthedocs.io/).
 
 ## Installation
-
-This project can be installed via pip:
 
 ```text
 pip install pytest-pvcr
@@ -14,90 +10,90 @@ pip install pytest-pvcr
 
 ## Usage
 
+Mark your tests with `@pytest.mark.pvcr()` and run them:
+
 ```python
 import subprocess
 import pytest
 
 @pytest.mark.pvcr()
-def test_command():
-    # subprocess.run is patched at runtime
+def test_ls():
     ret = subprocess.run(["ls", "/tmp"])
-
-    assert rc.returncode == 0
+    assert ret.returncode == 0
 
 @pytest.mark.pvcr(wait=False)
-def test_command():
-    # Super long command but since wait == False, PVCR does not wait its completion
-    ret = subprocess.run(["sleep", "1000"])
-
-    assert rc.returncode == 0
+def test_slow_command():
+    # On replay, pvcr won't sleep for the original command duration
+    ret = subprocess.run(["sleep", "10"])
+    assert ret.returncode == 0
 ```
-
-Run your tests:
 
 ```shell
 pytest --pvcr-record-mode=new test_commands.py
 ```
+
+Recordings are stored as YAML files in `recordings/<module>/<test_name>.yaml`.
 
 ### Record modes
 
-There are four record modes:
-
 ```shell
-# Only record new commands not previously recorded
-pytest --pvcr-record-mode=new test_commands.py
+# Only record new commands not previously recorded (default)
+pytest --pvcr-record-mode=new
 
-# Record nothing
-pytest --pvcr-record-mode=none test_commands.py
+# Replay only, never record
+pytest --pvcr-record-mode=none
 
-# Record all commands, even previously recorded ones
-pytest --pvcr-record-mode=all test_commands.py
+# Re-record all commands, even previously recorded ones
+pytest --pvcr-record-mode=all
 
-# Record on first run, then replay only (block unrecorded commands)
-pytest --pvcr-record-mode=once test_commands.py
+# Record on first run, then replay only and block unrecorded commands
+pytest --pvcr-record-mode=once
 ```
 
 The `once` mode is useful in CI: it records everything on the first run (when no
-recording file exists), then on subsequent runs it only replays and raises
+recording file exists), then on subsequent runs it replays and raises
 `PVCRBlockedRunException` if an unrecorded command is encountered.
 
 ### Block execution
 
-The execution of processes can be completely blocked.
-This is useful to protect test environments from destructive commands.
+Block all unrecorded subprocess calls, useful to protect test environments:
 
 ```shell
-pytest --pvcr-block-run test_commands.py
+pytest --pvcr-block-run
 ```
-
-The test will fail if an unrecorded command is executed.
 
 ### Fuzzy matching
 
-Commands can be fuzzy matched by defining one or more regex.
+Fuzzy matching replaces variable parts of commands so recordings stay portable.
 
-If a fuzzy regex has matching groups, the matched parts are kept for matching the commands.
-
-If a fuzzy regex has no matching groups, the whole matched string is ignored when matching the commands.
+**Via CLI** (global, applies to all tests):
 
 ```shell
 # Ignore `--dry-run` arguments when matching commands
-pytest --pvcr-fuzzy-matcher='--dry-run' test_commands.py
+pytest --pvcr-fuzzy-matcher='--dry-run'
 
-# Ignore the beginning of a path and keep the filename
-pytest --pvcr-fuzzy-matcher='^.+\/(kubeconfig)$' test_commands.py
+# Keep only the filename from a path
+pytest --pvcr-fuzzy-matcher='^.+\/(kubeconfig)$'
+
+# Automatically ignore the parent directory of the test file
+pytest --pvcr-auto-fuzzy-match
 ```
 
-It's possible to automatically ignore the parent path of the test script.
-This parameter is useful to make test assets portable.
+**Via marker** (per-test):
 
-```shell
-pytest --pvcr-auto-fuzzy-match test_commands.py
+```python
+@pytest.mark.pvcr()
+@pytest.mark.pvcr_fuzzy_matcher(r'^.+\/(config\.yml)$')
+def test_with_fuzzy():
+    subprocess.run(["cat", "/some/path/config.yml"])
 ```
+
+If a regex has **no capture groups**, the matched string is replaced with a placeholder.
+If a regex has **capture groups**, the captured parts are kept and the rest is replaced.
 
 ## Python support
 
-This plugin supports python >= 3.12
+Python >= 3.12
 
 ## Authors
 
