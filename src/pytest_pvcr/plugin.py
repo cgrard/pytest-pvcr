@@ -113,9 +113,6 @@ def pvcr(
         SubprocessWrapper.pvcr_block_run = pvcr_block_run
         recordings_file = Path(request.getfixturevalue("recordings_dir")) / f"{request.function.__name__}.yaml"
 
-        print("pvcr function")
-        print(pvcr_fuzzy_matchers)
-
         fuzzy_matchers = list(pvcr_global_fuzzy_matchers)
         for marker in pvcr_fuzzy_matchers:
             if not marker.args:
