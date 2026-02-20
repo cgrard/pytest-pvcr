@@ -3,8 +3,6 @@ import re
 from pathlib import Path
 from typing import Any
 
-logger = logging.getLogger("pvcr")
-
 from yaml import dump, load
 
 try:
@@ -12,6 +10,8 @@ try:
     from yaml import CLoader as Loader
 except ImportError:
     from yaml import Dumper, Loader
+
+logger = logging.getLogger("pvcr")
 
 
 FUZZY_PLACEHOLDER = "[[FUZZY_VALUE]]"
@@ -81,7 +81,11 @@ class Recording:
         Returns:
             a Recording
         """
-        ret = Recording(data.get("args", []), rc=data.get("rc", None), iteration=data.get("iteration", 1))
+        ret = Recording(
+            data.get("args", []),
+            rc=data.get("rc"),
+            iteration=data.get("iteration", 1),
+        )
 
         if "stdin" in data:
             ret.stdin = data.get("stdin")
@@ -114,7 +118,12 @@ class Recording:
         self.iteration = other.iteration
         self.duration = other.duration
 
-    def match(self, args: list[str], stdin: str | None = None, iteration: int | None = None) -> bool:
+    def match(
+        self,
+        args: list[str],
+        stdin: str | None = None,
+        iteration: int | None = None,
+    ) -> bool:
         """Match to recordings.
 
         Args:
@@ -125,8 +134,11 @@ class Recording:
         Returns:
             True if this recording match args, stdin and iteration number
         """
-        # Todo fuzzy match here
-        return self.args == args and self.stdin == stdin and (iteration is None or self.iteration == iteration)
+        return (
+            self.args == args
+            and self.stdin == stdin
+            and (iteration is None or self.iteration == iteration)
+        )
 
     def __eq__(self, other: object) -> bool:
         """Compare two recordings.
@@ -143,7 +155,12 @@ class Recording:
 
 
 class Recordings:
-    def __init__(self, recordings_file: Path, record_mode: str, fuzzy_matchers: list[str] | None = None) -> None:
+    def __init__(
+        self,
+        recordings_file: Path,
+        record_mode: str,
+        fuzzy_matchers: list[str] | None = None,
+    ) -> None:
         self._file = recordings_file
         self._mode = record_mode
         self._fuzzy_matchers = [re.compile(m) for m in (fuzzy_matchers or [])]
@@ -179,8 +196,8 @@ class Recordings:
     def _fuzzy_compiler(self, args: list[str | bytes]) -> list[str]:
         """Add fuzzy matching to a list or args.
 
-        Fuzzy matching is accomplished by replacing some regex or non-matching part of some regex
-        with a placeholder string.
+        Fuzzy matching is accomplished by replacing some regex or
+        non-matching part of some regex with a placeholder string.
 
         Args:
             args: a list of args
@@ -193,8 +210,10 @@ class Recordings:
             f_arg = str(arg)
 
             for f_re in self._fuzzy_matchers:
-                # If the regex has match group, we replace all the matched part with the placeholder
-                # Otherwise, the non-matching parts are replaced and the matched parts are kept.
+                # If the regex has match group, we replace all the
+                # matched part with the placeholder. Otherwise, the
+                # non-matching parts are replaced and the matched
+                # parts are kept.
                 if f_re.groups == 0:
                     f_arg = f_re.sub(FUZZY_PLACEHOLDER, f_arg)
                     continue
@@ -221,7 +240,8 @@ class Recordings:
     def append(self, args: list[str], stdin: str | None = None) -> Recording:
         """Append a command line to this list of recordings.
 
-        Fill the recording with saved data if a recording matching the parameters exists in the recordings file.
+        Fill the recording with saved data if a recording matching
+        the parameters exists in the recordings file.
 
         Args:
             args: a list of command line arguments
@@ -273,8 +293,15 @@ class Recordings:
         Args:
             recording: a Recording to write.
         """
-        if self._mode == "none" or (self._mode == "once" and self._file_existed_at_init):
-            logger.debug("Skipping write in '%s' record mode: %s", self._mode, recording.args)
+        skip_write = self._mode == "none" or (
+            self._mode == "once" and self._file_existed_at_init
+        )
+        if skip_write:
+            logger.debug(
+                "Skipping write in '%s' record mode: %s",
+                self._mode,
+                recording.args,
+            )
             return
 
         if not self._file.parent.exists():
@@ -300,7 +327,7 @@ class Recordings:
         else:
             idx = len(data.get("recordings"))
 
-        data["recordings"][idx:idx+1] = [recording.to_encoded_dict()]
+        data["recordings"][idx : idx + 1] = [recording.to_encoded_dict()]
 
         with self._file.open("w+") as rf:
             rf.write(dump(data, Dumper=Dumper))

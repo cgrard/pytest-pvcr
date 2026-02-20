@@ -1,5 +1,5 @@
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import pytest
 from _pytest.config import Config
@@ -13,7 +13,10 @@ from .wrapper import SubprocessWrapper, install_wrapper, uninstall_wrapper
 
 def pytest_configure(config: Config) -> None:
     config.addinivalue_line("markers", "pvcr: Mark the test as recording processes.")
-    config.addinivalue_line("markers", "pvcr_fuzzy_matcher(regex): Add a fuzzy matcher regex for PVCR recordings.")
+    config.addinivalue_line(
+        "markers",
+        "pvcr_fuzzy_matcher(regex): Add a fuzzy matcher regex for PVCR recordings.",
+    )
 
     install_wrapper()
 
@@ -110,7 +113,8 @@ def pvcr(
         SubprocessWrapper.pvcr_current_request = request
         SubprocessWrapper.pvcr_do_wait = pvcr_markers[0].kwargs.get("wait", True)
         SubprocessWrapper.pvcr_block_run = pvcr_block_run
-        recordings_file = Path(request.getfixturevalue("recordings_dir")) / f"{request.function.__name__}.yaml"
+        rec_dir = Path(request.getfixturevalue("recordings_dir"))
+        recordings_file = rec_dir / f"{request.function.__name__}.yaml"
 
         fuzzy_matchers = list(pvcr_global_fuzzy_matchers)
         for marker in pvcr_fuzzy_matchers:
@@ -124,7 +128,9 @@ def pvcr(
             module = request.node.path
             fuzzy_matchers.insert(0, str(module.parent.parent))
 
-        SubprocessWrapper.pvcr_history = Recordings(recordings_file, pvcr_record_mode, fuzzy_matchers)
+        SubprocessWrapper.pvcr_history = Recordings(
+            recordings_file, pvcr_record_mode, fuzzy_matchers
+        )
         yield SubprocessWrapper.pvcr_history
 
         # teardown

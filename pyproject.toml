@@ -18,3 +18,10 @@ build-backend = "uv_build"
 
 [project.entry-points.pytest11]
 pvcr = "pytest_pvcr.plugin"
+
+[tool.ruff]
+target-version = "py312"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
