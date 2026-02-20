@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import Iterator
 
@@ -91,8 +90,8 @@ def pvcr_block_run(request: SubRequest) -> bool:
 
 @pytest.fixture(scope="module")  # type: ignore
 def recordings_dir(request: SubRequest) -> str:
-    module = request.node.fspath
-    return os.path.join(module.dirname, "recordings", module.purebasename)
+    module = request.node.path
+    return str(module.parent / "recordings" / module.stem)
 
 
 @pytest.fixture(autouse=True)
@@ -128,8 +127,8 @@ def pvcr(
 
         # Insert automatic fuzzy matcher if requested
         if pvcr_auto_fuzzy_match:
-            module = request.node.fspath
-            fuzzy_matchers.insert(0, str(Path(module.dirname).parent))
+            module = request.node.path
+            fuzzy_matchers.insert(0, str(module.parent.parent))
 
         SubprocessWrapper.pvcr_history = Recordings(
             recordings_file, pvcr_record_mode, fuzzy_matchers
