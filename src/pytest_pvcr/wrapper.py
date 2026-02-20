@@ -44,7 +44,11 @@ def run(
 
     # Really execute the command and record its result
     before = time.time()
-    other_kwargs["capture_output"] = True
+    if "stdout" not in other_kwargs and "stderr" not in other_kwargs:
+        other_kwargs["capture_output"] = True
+    else:
+        other_kwargs.setdefault("stdout", SubprocessWrapper.pvcr_orig_cls.PIPE)
+        other_kwargs.setdefault("stderr", SubprocessWrapper.pvcr_orig_cls.PIPE)
     ret = SubprocessWrapper.pvcr_orig_cls.run(args, *other_args, stdin=stdin, **other_kwargs)
     after = time.time()
 
