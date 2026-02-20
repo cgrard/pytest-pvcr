@@ -127,9 +127,7 @@ def test_pvcr_record_mode_once_blocks_new(pytester):
         """),
     )
     # First run: record with first test file
-    result = pytester.runpytest(
-        "test_first.py", "--pvcr-record-mode=once", "-v"
-    )
+    result = pytester.runpytest("test_first.py", "--pvcr-record-mode=once", "-v")
     result.assert_outcomes(passed=1)
 
     # Copy recording for second test (same test name)
@@ -140,7 +138,5 @@ def test_pvcr_record_mode_once_blocks_new(pytester):
     shutil.copytree(src_dir, dst_dir)
 
     # Second run with new command should fail
-    result = pytester.runpytest(
-        "test_second.py", "--pvcr-record-mode=once", "-v"
-    )
+    result = pytester.runpytest("test_second.py", "--pvcr-record-mode=once", "-v")
     result.assert_outcomes(failed=1)

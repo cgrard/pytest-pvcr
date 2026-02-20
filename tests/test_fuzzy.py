@@ -47,8 +47,6 @@ class TestFuzzyCompiler:
 
     def test_partial_replacement_in_arg(self):
         recs = _make_recordings(["/tmp/test"])
-        result = recs._fuzzy_compiler(
-            ["cat", "/tmp/test/file.txt"]
-        )
+        result = recs._fuzzy_compiler(["cat", "/tmp/test/file.txt"])
         assert FUZZY_PLACEHOLDER in result[1]
         assert "file.txt" in result[1]
