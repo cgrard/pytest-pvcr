@@ -287,7 +287,7 @@ class Recordings:
         else:
             idx = len(data.get("recordings"))
 
-        data["recordings"][idx:] = [recording.to_encoded_dict()]
+        data["recordings"][idx:idx+1] = [recording.to_encoded_dict()]
 
         with self._file.open("w+") as rf:
             rf.write(dump(data, Dumper=Dumper))
