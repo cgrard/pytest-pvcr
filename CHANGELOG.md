@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Add `once` record mode (`--pvcr-record-mode=once`): records on first run, then replays only and blocks unrecorded commands on subsequent runs (`plugin.py`, `recordings.py`, `wrapper.py`)
 - Add structured logging via `logging.getLogger("pvcr")` for command interception, replay, recording, and blocking events (`wrapper.py`, `recordings.py`)
 - Add descriptive error message to `PVCRBlockedRunException` including the blocked command (`wrapper.py`)
 

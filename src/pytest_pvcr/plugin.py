@@ -28,7 +28,7 @@ def pytest_addoption(parser: Parser) -> None:
         "--pvcr-record-mode",
         action="store",
         default="new",
-        choices=("new", "none", "all"),
+        choices=("new", "none", "all", "once"),
         help='PVCR record mode. Default to "new".',
     )
     group.addoption(

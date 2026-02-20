@@ -8,7 +8,7 @@ This plugin was inspired by VCR.py.
 
 This project can be installed via pip:
 
-```
+```text
 pip install pytest-pvcr
 ```
 
@@ -41,7 +41,7 @@ pytest --pvcr-record-mode=new test_commands.py
 
 ### Record modes
 
-There is three record modes:
+There are four record modes:
 
 ```shell
 # Only record new commands not previously recorded
@@ -52,7 +52,14 @@ pytest --pvcr-record-mode=none test_commands.py
 
 # Record all commands, even previously recorded ones
 pytest --pvcr-record-mode=all test_commands.py
+
+# Record on first run, then replay only (block unrecorded commands)
+pytest --pvcr-record-mode=once test_commands.py
 ```
+
+The `once` mode is useful in CI: it records everything on the first run (when no
+recording file exists), then on subsequent runs it only replays and raises
+`PVCRBlockedRunException` if an unrecorded command is encountered.
 
 ### Block execution
 

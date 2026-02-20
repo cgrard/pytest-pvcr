@@ -147,8 +147,17 @@ class Recordings:
         self._file = recordings_file
         self._mode = record_mode
         self._fuzzy_matchers = [re.compile(m) for m in (fuzzy_matchers or [])]
+        self._file_existed_at_init = recordings_file.exists()
 
         self._history = []
+
+    @property
+    def block_unrecorded(self) -> bool:
+        """Return True if unrecorded commands should be blocked.
+
+        In 'once' mode, block when the recording file already existed at init.
+        """
+        return self._mode == "once" and self._file_existed_at_init
 
     def find_all(self, args: list[str], stdin: str | None = None) -> list[Recording]:
         """Find all occurence in history matching provided arguments.
@@ -264,8 +273,8 @@ class Recordings:
         Args:
             recording: a Recording to write.
         """
-        if self._mode == "none":
-            logger.debug("Skipping write in 'none' record mode: %s", recording.args)
+        if self._mode == "none" or (self._mode == "once" and self._file_existed_at_init):
+            logger.debug("Skipping write in '%s' record mode: %s", self._mode, recording.args)
             return
 
         if not self._file.parent.exists():
