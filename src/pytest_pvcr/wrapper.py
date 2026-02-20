@@ -2,7 +2,7 @@ import logging
 import subprocess
 import sys
 import time
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 logger = logging.getLogger("pvcr")
 
@@ -42,7 +42,11 @@ def run(
             stderr=recording.stderr,
         )
 
-    if SubprocessWrapper.pvcr_block_run or SubprocessWrapper.pvcr_history.block_unrecorded:
+    should_block = (
+        SubprocessWrapper.pvcr_block_run
+        or SubprocessWrapper.pvcr_history.block_unrecorded
+    )
+    if should_block:
         logger.warning("Blocked unrecorded command: %s", args)
         raise PVCRBlockedRunException(f"Blocked unrecorded command: {args}")
 
@@ -54,7 +58,9 @@ def run(
     else:
         other_kwargs.setdefault("stdout", SubprocessWrapper.pvcr_orig_cls.PIPE)
         other_kwargs.setdefault("stderr", SubprocessWrapper.pvcr_orig_cls.PIPE)
-    ret = SubprocessWrapper.pvcr_orig_cls.run(args, *other_args, stdin=stdin, **other_kwargs)
+    ret = SubprocessWrapper.pvcr_orig_cls.run(
+        args, *other_args, stdin=stdin, **other_kwargs
+    )
     after = time.time()
 
     recording.stdout = ret.stdout

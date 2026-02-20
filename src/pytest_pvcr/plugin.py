@@ -1,5 +1,5 @@
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import pytest
 from _pytest.config import Config
