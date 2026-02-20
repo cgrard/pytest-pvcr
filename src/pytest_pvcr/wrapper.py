@@ -19,11 +19,11 @@ def uninstall_wrapper() -> None:
 
 
 def run(
-    args,
-    *other_args,
-    stdin=None,
-    **other_kwargs,
-):
+    args: list[str] | str,
+    *other_args: Any,
+    stdin: bytes | str | None = None,
+    **other_kwargs: Any,
+) -> subprocess.CompletedProcess:
     recording = SubprocessWrapper.pvcr_history.append(args, stdin)
 
     # Return an existing instance if there is a recorded command
