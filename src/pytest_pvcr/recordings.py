@@ -238,8 +238,6 @@ class Recordings:
         Args:
             recording: a Recording to load.
         """
-        self._history = []
-
         if not self._file.exists():
             return
 
