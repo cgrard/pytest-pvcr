@@ -42,7 +42,7 @@ def run(
             stderr=recording.stderr,
         )
 
-    if SubprocessWrapper.pvcr_block_run:
+    if SubprocessWrapper.pvcr_block_run or SubprocessWrapper.pvcr_history.block_unrecorded:
         logger.warning("Blocked unrecorded command: %s", args)
         raise PVCRBlockedRunException(f"Blocked unrecorded command: {args}")
 
