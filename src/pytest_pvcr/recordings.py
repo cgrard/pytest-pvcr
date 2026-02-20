@@ -1,6 +1,9 @@
+import logging
 import re
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger("pvcr")
 
 from yaml import dump, load
 
@@ -248,9 +251,9 @@ class Recordings:
             return
 
         for s_recording in data.get("recordings", []):
-            # self._history.append(Recording.from_encoded_dict(recording))
             o_recording = Recording.from_encoded_dict(s_recording)
             if recording == o_recording:
+                logger.debug("Loaded recording from %s: %s", self._file, recording.args)
                 recording.copy(o_recording)
                 recording.saved = True
                 break
@@ -262,6 +265,7 @@ class Recordings:
             recording: a Recording to write.
         """
         if self._mode == "none":
+            logger.debug("Skipping write in 'none' record mode: %s", recording.args)
             return
 
         if not self._file.parent.exists():
@@ -292,6 +296,7 @@ class Recordings:
         with self._file.open("w+") as rf:
             rf.write(dump(data, Dumper=Dumper))
 
+        logger.debug("Wrote recording to %s: %s", self._file, recording.args)
         recording.saved = True
 
     def clean(self, write: bool = False) -> None:

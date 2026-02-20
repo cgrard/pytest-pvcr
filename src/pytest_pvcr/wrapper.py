@@ -1,7 +1,10 @@
+import logging
 import subprocess
 import sys
 import time
 from typing import Any, TYPE_CHECKING
+
+logger = logging.getLogger("pvcr")
 
 if TYPE_CHECKING:
     from .recordings import Recordings
@@ -28,6 +31,7 @@ def run(
 
     # Return an existing instance if there is a recorded command
     if recording.saved:
+        logger.debug("Replaying recorded command: %s", args)
         if SubprocessWrapper.pvcr_do_wait:
             time.sleep(recording.duration / 1000000)
 
@@ -39,10 +43,11 @@ def run(
         )
 
     if SubprocessWrapper.pvcr_block_run:
-        # Block unrecorded runs
-        raise PVCRBlockedRunException()
+        logger.warning("Blocked unrecorded command: %s", args)
+        raise PVCRBlockedRunException(f"Blocked unrecorded command: {args}")
 
     # Really execute the command and record its result
+    logger.debug("Executing and recording command: %s", args)
     before = time.time()
     if "stdout" not in other_kwargs and "stderr" not in other_kwargs:
         other_kwargs["capture_output"] = True
