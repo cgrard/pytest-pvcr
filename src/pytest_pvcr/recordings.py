@@ -69,7 +69,7 @@ class Recording:
         return ret
 
     @classmethod
-    def from_encoded_dict(self, data: dict[str, Any]) -> "Recording":
+    def from_encoded_dict(cls, data: dict[str, Any]) -> "Recording":
         """Create a Recording instance from a dictionnary of data.
 
         Args:
