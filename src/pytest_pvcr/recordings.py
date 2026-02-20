@@ -143,7 +143,7 @@ class Recordings:
     def __init__(self, recordings_file: Path, record_mode: str, fuzzy_matchers: list[str] | None = None) -> None:
         self._file = recordings_file
         self._mode = record_mode
-        self._fuzzy_matchers = fuzzy_matchers or []
+        self._fuzzy_matchers = [re.compile(m) for m in (fuzzy_matchers or [])]
 
         self._history = []
 
@@ -180,9 +180,7 @@ class Recordings:
         for arg in args:
             f_arg = str(arg)
 
-            for f_matcher in self._fuzzy_matchers:
-                f_re = re.compile(f_matcher)
-
+            for f_re in self._fuzzy_matchers:
                 # If the regex has match group, we replace all the matched part with the placeholder
                 # Otherwise, the non-matching parts are replaced and the matched parts are kept.
                 if f_re.groups == 0:
