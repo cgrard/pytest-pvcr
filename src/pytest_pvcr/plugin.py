@@ -126,6 +126,9 @@ def pvcr(
             fuzzy_matchers.insert(0, str(Path(module.dirname).parent))
 
         SubprocessWrapper.pvcr_history = Recordings(recordings_file, pvcr_record_mode, fuzzy_matchers)
-            # print("init")
-            # print(fuzzy_matchers)
         yield SubprocessWrapper.pvcr_history
+
+        # teardown
+        SubprocessWrapper.pvcr_enabled = False
+        SubprocessWrapper.pvcr_current_request = None
+        SubprocessWrapper.pvcr_history = None
