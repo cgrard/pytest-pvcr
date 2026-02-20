@@ -125,7 +125,7 @@ class Recording:
         # Todo fuzzy match here
         return self.args == args and self.stdin == stdin and (iteration is None or self.iteration == iteration)
 
-    def __eq__(self, other: Recording) -> bool:
+    def __eq__(self, other: object) -> bool:
         """Compare two recordings.
 
         Args:
@@ -134,6 +134,8 @@ class Recording:
         Returns:
             True if other's args, stdin and iteration are equals to ours
         """
+        if not isinstance(other, Recording):
+            return NotImplemented
         return self.match(other.args, other.stdin, other.iteration)
 
 
