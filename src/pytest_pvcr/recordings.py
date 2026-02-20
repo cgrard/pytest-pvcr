@@ -1,3 +1,4 @@
+import base64
 import logging
 import re
 from pathlib import Path
@@ -15,6 +16,27 @@ logger = logging.getLogger("pvcr")
 
 
 FUZZY_PLACEHOLDER = "[[FUZZY_VALUE]]"
+
+
+def _encode_value(value: str | bytes | None) -> str | dict | None:
+    """Encode a value for YAML serialization.
+
+    Bytes are stored as base64-encoded strings wrapped in a dict
+    to distinguish them from regular strings.
+    """
+    if isinstance(value, bytes):
+        return {"__base64__": base64.b64encode(value).decode("ascii")}
+    return value
+
+
+def _decode_value(value: str | dict | None) -> str | bytes | None:
+    """Decode a value from YAML deserialization.
+
+    Detects base64-wrapped dicts and decodes them back to bytes.
+    """
+    if isinstance(value, dict) and "__base64__" in value:
+        return base64.b64decode(value["__base64__"])
+    return value
 
 
 class Recording:
@@ -61,13 +83,13 @@ class Recording:
         }
 
         if self.stdin is not None:
-            ret["stdin"] = self.stdin
+            ret["stdin"] = _encode_value(self.stdin)
 
         if self.stdout is not None:
-            ret["stdout"] = self.stdout
+            ret["stdout"] = _encode_value(self.stdout)
 
         if self.stderr is not None:
-            ret["stderr"] = self.stderr
+            ret["stderr"] = _encode_value(self.stderr)
 
         return ret
 
@@ -88,13 +110,13 @@ class Recording:
         )
 
         if "stdin" in data:
-            ret.stdin = data.get("stdin")
+            ret.stdin = _decode_value(data.get("stdin"))
 
         if "stdout" in data:
-            ret.stdout = data.get("stdout")
+            ret.stdout = _decode_value(data.get("stdout"))
 
         if "stderr" in data:
-            ret.stderr = data.get("stderr")
+            ret.stderr = _decode_value(data.get("stderr"))
 
         if "rc" in data:
             ret.rc = data.get("rc")

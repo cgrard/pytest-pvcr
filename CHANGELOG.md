@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Fix `bytes` values (`stdout`, `stderr`, `stdin`) not surviving YAML serialization roundtrip. Bytes are now base64-encoded for storage and decoded on load, preserving the original type. Backward-compatible with existing `str` recordings (`recordings.py`)
 - Fix `stdin` passed as positional argument to `subprocess.run()` instead of keyword argument, causing it to be interpreted as `bufsize` (`wrapper.py`)
 - Fix `write()` truncating all recordings after the replaced one in `all` mode by using `[idx:idx+1]` slice instead of `[idx:]` (`recordings.py`)
 - Fix global fuzzy matchers list being mutated across tests, causing matchers to accumulate (`plugin.py`)
