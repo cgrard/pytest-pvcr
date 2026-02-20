@@ -45,7 +45,7 @@ def run(
     # Really execute the command and record its result
     before = time.time()
     other_kwargs["capture_output"] = True
-    ret = SubprocessWrapper.pvcr_orig_cls.run(args, stdin, *other_args, **other_kwargs)
+    ret = SubprocessWrapper.pvcr_orig_cls.run(args, *other_args, stdin=stdin, **other_kwargs)
     after = time.time()
 
     recording.stdout = ret.stdout
