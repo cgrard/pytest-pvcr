@@ -1,5 +1,9 @@
 # pytest-pvcr
 
+![PyPI version](https://img.shields.io/pypi/v/pytest-pvcr.svg)
+![Python versions](https://img.shields.io/pypi/pyversions/pytest-pyvcr.svg)
+![License](https://img.shields.io/pypi/l/pytest-pyvcr.svg)
+
 A pytest plugin that records and replays commands executed with `subprocess.run()`.
 
 This plugin was inspired by VCR.py.
