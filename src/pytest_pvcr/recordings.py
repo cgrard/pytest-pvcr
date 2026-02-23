@@ -78,7 +78,11 @@ class Recording:
         Returns:
             a Recording
         """
-        ret = Recording(data.get("args", []), rc=data.get("rc", None), iteration=data.get("iteration", 1))
+        ret = Recording(
+            data.get("args", []),
+            rc=data.get("rc", None),
+            iteration=data.get("iteration", 1),
+        )
 
         if "stdin" in data:
             ret.stdin = data.get("stdin")
@@ -111,7 +115,9 @@ class Recording:
         self.iteration = other.iteration
         self.duration = other.duration
 
-    def match(self, args: list[str], stdin: str | None = None, iteration: int | None = None) -> bool:
+    def match(
+        self, args: list[str], stdin: str | None = None, iteration: int | None = None
+    ) -> bool:
         """Match to recordings.
 
         Args:
@@ -123,9 +129,13 @@ class Recording:
             True if this recording match args, stdin and iteration number
         """
         # Todo fuzzy match here
-        return self.args == args and self.stdin == stdin and (iteration is None or self.iteration == iteration)
+        return (
+            self.args == args
+            and self.stdin == stdin
+            and (iteration is None or self.iteration == iteration)
+        )
 
-    def __eq__(self, other: Recording) -> bool:
+    def __eq__(self, other: "Recording") -> bool:
         """Compare two recordings.
 
         Args:
@@ -138,7 +148,12 @@ class Recording:
 
 
 class Recordings:
-    def __init__(self, recordings_file: Path, record_mode: str, fuzzy_matchers: list[str] | None = None) -> None:
+    def __init__(
+        self,
+        recordings_file: Path,
+        record_mode: str,
+        fuzzy_matchers: list[str] | None = None,
+    ) -> None:
         self._file = recordings_file
         self._mode = record_mode
         self._fuzzy_matchers = fuzzy_matchers or []
