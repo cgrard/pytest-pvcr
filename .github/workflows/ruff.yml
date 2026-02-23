@@ -1,0 +1,17 @@
+---
+name: Ruff linting and formatting
+on: push
+jobs:
+  check:
+    name: Ruff check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: Install the latest version of ruff with a custom GitHub token
+      uses: astral-sh/ruff-action@v3
+      with:
+        src: "./src"
+    - run: ruff check
+    - run: ruff format --check --diff
