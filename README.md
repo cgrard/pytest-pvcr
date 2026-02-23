@@ -94,4 +94,4 @@ This plugin supports python >= 3.12
 
 ## Authors
 
-* Fabien Dupont <fabien.dupont@eurofiber.com>
+* Fabien Dupont <fab+github@kafe-in.net>
