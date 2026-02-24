@@ -54,9 +54,7 @@ pytest --pvcr-record-mode=all
 pytest --pvcr-record-mode=once
 ```
 
-The `once` mode is useful in CI: it records everything on the first run (when no
-recording file exists), then on subsequent runs it replays and raises
-`PVCRBlockedRunException` if an unrecorded command is encountered.
+The `once` mode is useful in CI: it records everything on the first run (when no recording file exists), then on subsequent runs it replays and raises `PVCRBlockedRunException` if an unrecorded command is encountered.
 
 ### Block execution
 
