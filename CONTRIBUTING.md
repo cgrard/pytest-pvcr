@@ -80,5 +80,4 @@ Current coverage: **67%** (threshold: 65%)
 
 ### Infrastructure
 
-- [ ] Add security scanning to CI (bandit, safety)
 - [ ] Add pre-commit hooks configuration
