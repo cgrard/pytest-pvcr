@@ -8,6 +8,7 @@ license-files = ["LICENSE"]
 authors = [
     { name = "Fabien Dupont", email = "fab+github@kafe-in.net" }
 ]
+license = {file = "LICENSE"}
 requires-python = ">=3.12"
 dependencies = [
     "pytest>=3.5.0",
@@ -36,9 +37,26 @@ pvcr = "pytest_pvcr.plugin"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+[tool.coverage.run]
+source = ["pytest_pvcr"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 65
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "pass",
+]
+
 [tool.ruff]
 target-version = "py312"
 src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.0.0",
+]
