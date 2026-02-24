@@ -24,20 +24,44 @@ All notable changes to this project will be documented in this file.
 - Add `once` record mode (`--pvcr-record-mode=once`): records on first run, then replays only and blocks unrecorded commands on subsequent runs (`plugin.py`, `recordings.py`, `wrapper.py`)
 - Add structured logging via `logging.getLogger("pvcr")` for command interception, replay, recording, and blocking events (`wrapper.py`, `recordings.py`)
 - Add descriptive error message to `PVCRBlockedRunException` including the blocked command (`wrapper.py`)
-- Add `ruff` linter and formatter configuration in `pyproject.toml` (rules: E, F, I, W, UP, B, SIM)
 - Add test suite with 53 tests: unit tests for `Recording`, `Recordings`, encoding, fuzzy matching, and integration tests via `pytester` (`tests/`)
 - Add CI workflow (`.github/workflows/ci.yml`): runs ruff lint/format and pytest on Python 3.12/3.13/3.14 for pushes to main and PRs
-- Add MIT license (`LICENSE`)
 - Add code coverage reporting with `pytest-cov` in tests and CI (`pyproject.toml`, `.github/workflows/ci.yml`)
 - Add `CONTRIBUTING.md` with development setup, commit convention, and project roadmap
 
 ### Changed
-
-- Restrict publish workflow to tagged releases only (`v*` tags) instead of every push
 
 - Pre-compile fuzzy matcher regexes once in `Recordings.__init__()` instead of recompiling on every `_fuzzy_compiler` call (`recordings.py`)
 - Migrate from deprecated `request.node.fspath` (py.path) to `request.node.path` (pathlib.Path) (`plugin.py`)
 - Remove unused `import os` (`plugin.py`)
 - Remove unused `hello()` scaffolding function (`__init__.py`)
 - Add type annotations to `run()` function parameters and return type (`wrapper.py`)
-- Apply `ruff` linting and formatting across all source files (line length, import ordering, style fixes)
+
+## [0.1.1] - 2026-02-23
+
+### Added
+
+- Add MIT license file (`LICENSE`)
+- Add package metadata to project configuration (`pyproject.toml`)
+- Add `ruff` linter and formatter configuration; apply linting and formatting across source files
+- Add badges (PyPI version, Python versions, License) to README
+
+### Fixed
+
+- Fix email address in README
+
+### Changed
+
+- Restrict publish workflow to tagged releases only (`v*` tags) instead of every push
+
+## [0.1.0] - 2026-02-20
+
+### Added
+
+- Initial release of pytest-pvcr
+- `@pytest.mark.pvcr()` marker to enable recording/replay of `subprocess.run()` calls
+- Record modes: `new` (default), `none`, `all`
+- `--pvcr-record-mode` and `--pvcr-block-run` CLI options
+- Fuzzy matching via `@pytest.mark.pvcr_fuzzy_matcher()` and `--pvcr-fuzzy-matcher`
+- YAML-based recording storage
+- GitHub Actions workflow for publishing to PyPI
