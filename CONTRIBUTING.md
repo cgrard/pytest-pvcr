@@ -45,7 +45,7 @@ Scopes: `plugin`, `wrapper`, `recordings`, `ci`, `tests`, `project`
 - [ ] Add tests for invalid fuzzy matcher regexes
 - [ ] Add tests for corrupted/malformed YAML recording files
 - [ ] Add tests for Unicode/non-ASCII subprocess output
-- [ ] Improve coverage of `plugin.py` (currently 51%, limited by pytest plugin import order)
+- [ ] Improve coverage of `plugin.py` (currently 50%, limited by pytest plugin import order)
 
 ### Features
 
@@ -63,6 +63,6 @@ Scopes: `plugin`, `wrapper`, `recordings`, `ci`, `tests`, `project`
 
 ### Infrastructure
 
-- [ ] Tag and release v0.1.0
+- [x] Tag and release v0.1.0 / v0.1.1
 - [ ] Add security scanning to CI (bandit, safety)
 - [ ] Add pre-commit hooks configuration
