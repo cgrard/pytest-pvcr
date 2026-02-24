@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Add CI workflow (`.github/workflows/ci.yml`): runs ruff lint/format and pytest on Python 3.12/3.13/3.14 for pushes to main and PRs
 - Add code coverage reporting with `pytest-cov` in tests and CI (`pyproject.toml`, `.github/workflows/ci.yml`)
 - Add `CONTRIBUTING.md` with development setup, commit convention, and project roadmap
+- Add security scanning in CI with `bandit` (static analysis) and `pip-audit` (dependency vulnerabilities)
 
 ### Changed
 

@@ -55,7 +55,13 @@ src = ["src"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B", "SIM"]
 
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B404"]
+
 [dependency-groups]
 dev = [
+    "bandit>=1.8.0",
+    "pip-audit>=2.7.0",
     "pytest-cov>=7.0.0",
 ]

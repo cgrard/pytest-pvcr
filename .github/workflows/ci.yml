@@ -21,6 +21,16 @@ jobs:
         with:
           args: format --check src/ tests/
 
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run bandit -r src/ -c pyproject.toml
+      - run: uv run pip-audit
+
   test:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
