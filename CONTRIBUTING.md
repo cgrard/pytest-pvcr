@@ -36,16 +36,33 @@ type(scope): description
 Types: `feat`, `fix`, `docs`, `refactor`, `chore`, `test`
 Scopes: `plugin`, `wrapper`, `recordings`, `ci`, `tests`, `project`
 
+## Test Coverage
+
+Current coverage: **67%** (threshold: 65%)
+
+| File | Coverage | Notes |
+| ---- | -------- | ----- |
+| `plugin.py` | 50% | Module loaded before coverage starts (pytester runs a subprocess). Imports, hooks, and fixtures are not measured. |
+| `wrapper.py` | 60% | Same early-load issue. The explicit `stdout`/`stderr` fallback branch (lines 61-62) and `MetaSubprocessWrapper.__getattribute__` are not covered. |
+| `recordings.py` | 77% | Some branches untested: `write()` in `all` mode replacing an existing entry, `clean(write=True)` deleting the file, and some fuzzy compiler edge cases. |
+
+### Quick wins to improve coverage
+
+- Test `subprocess.run()` with explicit `stdout`/`stderr` arguments (covers `wrapper.py` lines 61-62)
+- Test `Recordings.clean(write=True)` when a recording file exists (covers `recordings.py` file deletion)
+- Test `write()` in `all` mode replacing an already-recorded command (covers `recordings.py` slice replacement)
+
 ## Roadmap
 
 ### Tests
 
 - [ ] Add edge case tests for `wrapper.py`: empty args, special characters, large stdin/stdout
 - [ ] Add tests for combining multiple CLI flags (`--pvcr-block-run` + `--pvcr-record-mode`, etc.)
+- [ ] Add tests for explicit `stdout`/`stderr` arguments to `subprocess.run()`
 - [ ] Add tests for invalid fuzzy matcher regexes
 - [ ] Add tests for corrupted/malformed YAML recording files
 - [ ] Add tests for Unicode/non-ASCII subprocess output
-- [ ] Improve coverage of `plugin.py` (currently 50%, limited by pytest plugin import order)
+- [ ] Improve coverage of `plugin.py` (currently 50%, limited by pytest plugin import order — structural limitation)
 
 ### Features
 
@@ -63,6 +80,5 @@ Scopes: `plugin`, `wrapper`, `recordings`, `ci`, `tests`, `project`
 
 ### Infrastructure
 
-- [x] Tag and release v0.1.0 / v0.1.1
 - [ ] Add security scanning to CI (bandit, safety)
 - [ ] Add pre-commit hooks configuration
