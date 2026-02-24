@@ -27,6 +27,9 @@ All notable changes to this project will be documented in this file.
 - Add `ruff` linter and formatter configuration in `pyproject.toml` (rules: E, F, I, W, UP, B, SIM)
 - Add test suite with 53 tests: unit tests for `Recording`, `Recordings`, encoding, fuzzy matching, and integration tests via `pytester` (`tests/`)
 - Add CI workflow (`.github/workflows/ci.yml`): runs ruff lint/format and pytest on Python 3.12/3.13/3.14 for pushes to main and PRs
+- Add MIT license (`LICENSE`)
+- Add code coverage reporting with `pytest-cov` in tests and CI (`pyproject.toml`, `.github/workflows/ci.yml`)
+- Add `CONTRIBUTING.md` with development setup, commit convention, and project roadmap
 
 ### Changed
 
