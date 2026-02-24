@@ -2,6 +2,8 @@
 
 ## Development Setup
 
+Fork the repository and clone your fork:
+
 ```bash
 git clone https://github.com/<owner>/pytest-pvcr.git
 cd pytest-pvcr
